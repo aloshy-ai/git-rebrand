@@ -10,7 +10,7 @@ This project and everyone participating in it is governed by our [Code of Conduc
 
 ### Reporting Bugs
 Before creating bug reports, please:
-- Check the [existing issues](https://github.com/yourusername/git-rebrand/issues)
+- Check the [existing issues](https://github.com/aloshy-ai/git-rebrand/issues)
 - Check if the issue still exists with the latest version
 - Collect information about your environment (OS, Rust version, Git version)
 
@@ -48,7 +48,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 2. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/git-rebrand.git
+git clone https://github.com/aloshy-ai/git-rebrand.git
 cd git-rebrand
 ```
 

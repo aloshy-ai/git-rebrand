@@ -21,7 +21,7 @@ A Git extension to rewrite repository history for rebranding purposes. Safely up
 
 ### Using Homebrew
 ```bash
-brew install yourusername/tap/git-rebrand
+brew install aloshy-ai/tap/git-rebrand
 ```
 
 ### Using Cargo
@@ -31,7 +31,7 @@ cargo install git-rebrand
 
 ### From Source
 ```bash
-git clone https://github.com/yourusername/git-rebrand.git
+git clone https://github.com/aloshy-ai/git-rebrand.git
 cd git-rebrand
 cargo install --path .
 ```
@@ -79,7 +79,7 @@ patterns:
 ### Setup
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/git-rebrand.git
+git clone https://github.com/aloshy-ai/git-rebrand.git
 cd git-rebrand
 
 # Install development dependencies
