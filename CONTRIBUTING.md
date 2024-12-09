@@ -76,7 +76,7 @@ git-rebrand/
 cargo test
 
 # Run with coverage
-cargo tarpaulin
+cargo llvm-cov
 
 # Run specific test
 cargo test test_pattern_matching
