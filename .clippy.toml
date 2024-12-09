@@ -1,0 +1,5 @@
+cognitive-complexity-threshold = 30
+doc-valid-idents = ["OAuth"]
+too-many-arguments-threshold = 10
+type-complexity-threshold = 250
+enum-variant-size-threshold = 200
