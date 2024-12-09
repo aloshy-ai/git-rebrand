@@ -97,7 +97,7 @@ cargo test
 cargo test
 
 # Run with coverage
-cargo tarpaulin
+cargo llvm-cov
 
 # Run specific tests
 cargo test pattern_matching
