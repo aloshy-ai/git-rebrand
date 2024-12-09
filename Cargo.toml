@@ -2,10 +2,10 @@
 name = "git-rebrand"
 version = "0.1.0"
 edition = "2021"
-authors = ["Your Name <your.email@example.com>"]
+authors = ["aloshy.🅰🅸 <noreply@aloshy.ai>"]
 description = "A Git extension to rewrite repository history for rebranding purposes"
 license = "MIT"
-repository = "https://github.com/yourusername/git-rebrand"
+repository = "https://github.com/aloshy-ai/git-rebrand"
 readme = "README.md"
 keywords = ["git", "vcs", "rewrite", "history", "rebrand"]
 categories = ["command-line-utilities", "development-tools"]
@@ -58,9 +58,6 @@ pretty_assertions = "1.4"
 
 # Benchmarking
 criterion = "0.5"
-
-# Code coverage
-cargo-tarpaulin = "0.27.3"
 
 [profile.release]
 lto = true

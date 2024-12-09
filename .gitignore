@@ -22,3 +22,11 @@ Cargo.lock
 
 # Added by cargo
 /target
+
+# Act specific
+.actrcs
+
+# Env Variables
+.env*
+!.env.example
+

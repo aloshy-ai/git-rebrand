@@ -18,11 +18,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ github.ref_name }} # Extracts the tag name (e.g., v1.0.0)
+          release_name: Release ${{ github.ref_name }} # Uses the extracted tag name for the release
           draft: false
           prerelease: false
-
+  
   build-release:
     name: Build Release
     needs: create-release
@@ -39,16 +39,16 @@ jobs:
           - os: windows-latest
             artifact_name: git-rebrand.exe
             asset_name: git-rebrand-windows-amd64.exe
-
+    
     steps:
       - uses: actions/checkout@v3
-
+      
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
-
+      
       - name: Build release binary
         run: cargo build --release
-
+      
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
