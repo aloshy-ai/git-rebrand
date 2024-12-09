@@ -1,7 +1,9 @@
 # git-rebrand
 
 [![CI](https://img.shields.io/github/actions/workflow/status/aloshy-ai/git-rebrand/ci.yml?branch=main&label=CI)](https://github.com/aloshy-ai/git-rebrand/actions)
-[![Crates.io](https://img.shields.io/crates/v/git-rebrand?label=Crates.io)](https://crates.io/crates/git-rebrand)
+[![License](https://img.shields.io/github/license/aloshy-ai/git-rebrand?label=License)](https://github.com/aloshy-ai/git-rebrand/blob/main/LICENSE)
+[![Release](https://img.shields.io/github/v/release/aloshy-ai/git-rebrand?label=Release)](https://github.com/aloshy-ai/git-rebrand/releases/tag/main)
+
 
 A Git extension to rewrite repository history for rebranding purposes. Safely update author information across your Git history while maintaining commit integrity.
 
