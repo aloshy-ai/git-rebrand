@@ -1,7 +1,7 @@
 use anyhow::Result;
 use git2::Repository;
+use git_rebrand::{Config, GitRebrandError, GitRebrander};
 use tempfile::TempDir;
-use git_rebrand::{GitRebrander, Config, GitRebrandError};
 
 mod common;
 use common::TestRepo;
@@ -35,7 +35,7 @@ mod configuration {
     fn test_valid_config_file() -> Result<()> {
         let temp = TempDir::new()?;
         let config_path = temp.path().join("config.yml");
-        
+
         let config_content = r#"
             new_author_name: "New Author"
             new_author_email: "new@example.com"
@@ -56,7 +56,7 @@ mod configuration {
     fn test_invalid_email_in_config() -> Result<()> {
         let temp = TempDir::new()?;
         let config_path = temp.path().join("config.yml");
-        
+
         let config_content = r#"
             new_author_name: "New Author"
             new_author_email: "invalid-email"
@@ -77,11 +77,7 @@ mod pattern_matching {
     #[test]
     fn test_exact_email_match() -> Result<()> {
         let repo = TestRepo::new()?;
-        repo.commit_with_author(
-            "Test commit",
-            "Old Author",
-            "old@example.com"
-        )?;
+        repo.commit_with_author("Test commit", "Old Author", "old@example.com")?;
 
         let config = Config {
             new_author_name: "New Author".to_string(),
@@ -101,11 +97,7 @@ mod pattern_matching {
     #[test]
     fn test_email_domain_match() -> Result<()> {
         let repo = TestRepo::new()?;
-        repo.commit_with_author(
-            "Test commit",
-            "Old Author",
-            "test@oldcompany.com"
-        )?;
+        repo.commit_with_author("Test commit", "Old Author", "test@oldcompany.com")?;
 
         let config = Config {
             new_author_name: "New Author".to_string(),
@@ -124,11 +116,7 @@ mod pattern_matching {
     #[test]
     fn test_case_insensitive_name_match() -> Result<()> {
         let repo = TestRepo::new()?;
-        repo.commit_with_author(
-            "Test commit",
-            "Old Author Name",
-            "test@example.com"
-        )?;
+        repo.commit_with_author("Test commit", "Old Author Name", "test@example.com")?;
 
         let config = Config {
             new_author_name: "New Author".to_string(),
@@ -151,11 +139,7 @@ mod history_rewriting {
     #[test]
     fn test_successful_rewrite() -> Result<()> {
         let repo = TestRepo::new()?;
-        repo.commit_with_author(
-            "Test commit",
-            "Old Author",
-            "old@example.com"
-        )?;
+        repo.commit_with_author("Test commit", "Old Author", "old@example.com")?;
 
         let config = Config {
             new_author_name: "New Author".to_string(),
@@ -179,11 +163,7 @@ mod history_rewriting {
     #[test]
     fn test_backup_branch_creation() -> Result<()> {
         let repo = TestRepo::new()?;
-        repo.commit_with_author(
-            "Test commit",
-            "Old Author",
-            "old@example.com"
-        )?;
+        repo.commit_with_author("Test commit", "Old Author", "old@example.com")?;
 
         let config = Config {
             new_author_name: "New Author".to_string(),
@@ -198,10 +178,11 @@ mod history_rewriting {
 
         // Verify backup branch exists
         let git_repo = Repository::open(repo.path())?;
-        let branches: Vec<_> = git_repo.branches(None)?
+        let branches: Vec<_> = git_repo
+            .branches(None)?
             .map(|b| b.unwrap().0.name().unwrap().unwrap().to_string())
             .collect();
-        
+
         assert!(branches.iter().any(|name| name.starts_with("backup_")));
         Ok(())
     }
@@ -209,11 +190,7 @@ mod history_rewriting {
     #[test]
     fn test_no_backup_when_disabled() -> Result<()> {
         let repo = TestRepo::new()?;
-        repo.commit_with_author(
-            "Test commit",
-            "Old Author",
-            "old@example.com"
-        )?;
+        repo.commit_with_author("Test commit", "Old Author", "old@example.com")?;
 
         let config = Config {
             new_author_name: "New Author".to_string(),
@@ -227,10 +204,11 @@ mod history_rewriting {
         rebrander.run()?;
 
         let git_repo = Repository::open(repo.path())?;
-        let branches: Vec<_> = git_repo.branches(None)?
+        let branches: Vec<_> = git_repo
+            .branches(None)?
             .map(|b| b.unwrap().0.name().unwrap().unwrap().to_string())
             .collect();
-        
+
         assert!(!branches.iter().any(|name| name.starts_with("backup_")));
         Ok(())
     }
@@ -242,11 +220,7 @@ mod error_handling {
     #[test]
     fn test_no_matching_commits() -> Result<()> {
         let repo = TestRepo::new()?;
-        repo.commit_with_author(
-            "Test commit",
-            "Different Author",
-            "different@example.com"
-        )?;
+        repo.commit_with_author("Test commit", "Different Author", "different@example.com")?;
 
         let config = Config {
             new_author_name: "New Author".to_string(),

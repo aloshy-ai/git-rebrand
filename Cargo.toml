@@ -59,6 +59,9 @@ pretty_assertions = "1.4"
 # Benchmarking
 criterion = "0.5"
 
+# Code coverage
+cargo-tarpaulin = "0.27.3"
+
 [profile.release]
 lto = true
 codegen-units = 1

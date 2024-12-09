@@ -59,19 +59,21 @@ fn default_backup() -> bool {
 impl Config {
     pub fn from_file<P: AsRef<Path>>(path: P) -> Result<Self> {
         let content = fs::read_to_string(path).context("Failed to read configuration file")?;
-        let config: Self = serde_yaml::from_str(&content).context("Failed to parse configuration file")?;
-        
+        let config: Self =
+            serde_yaml::from_str(&content).context("Failed to parse configuration file")?;
+
         // Validate email format
         let email_regex = Regex::new(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
             .context("Failed to compile email regex")?;
-            
+
         if !email_regex.is_match(&config.new_author_email) {
             return Err(GitRebrandError::InvalidConfig(format!(
                 "Invalid email format: {}",
                 config.new_author_email
-            )).into());
+            ))
+            .into());
         }
-        
+
         Ok(config)
     }
 
@@ -290,9 +292,11 @@ impl GitRebrander {
             if commit_ids.contains(&commit_short_id) {
                 debug!("Rewriting commit: {}", commit_short_id);
 
-                let new_author = Signature::now(&self.config.new_author_name, &self.config.new_author_email)?;
+                let new_author =
+                    Signature::now(&self.config.new_author_name, &self.config.new_author_email)?;
                 let tree = commit.tree()?;
-                let parents: Vec<_> = commit.parent_ids()
+                let parents: Vec<_> = commit
+                    .parent_ids()
                     .map(|id| self.repo.find_commit(id))
                     .collect::<Result<Vec<_>, _>>()?;
                 let parent_refs: Vec<_> = parents.iter().collect();
