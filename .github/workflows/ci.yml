@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 env:
   CARGO_TERM_COLOR: always
@@ -20,19 +20,20 @@ jobs:
       options: --security-opt seccomp=unconfined
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Install LLVM tools
         run: |
           apt-get update
           apt-get install -y llvm
-      
+
       - name: Install cargo-llvm-cov
         uses: taiki-e/install-action@cargo-llvm-cov
-      
+
       - name: Generate code coverage
         run: cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
-      
+
       - name: Upload coverage to Codecov
+        if: github.actor != 'nektos/act' # Skip this step when running locally
         uses: codecov/codecov-action@v3
         with:
           files: lcov.info
@@ -94,7 +95,7 @@ jobs:
           export OPENSSL_STATIC=1
           export OPENSSL_LIB_DIR=$(brew --prefix openssl@3)/lib
           export OPENSSL_INCLUDE_DIR=$(brew --prefix openssl@3)/include
-          
+
           cargo build --verbose --target ${{ matrix.target }}
 
       - name: Run tests
@@ -103,5 +104,5 @@ jobs:
           export OPENSSL_STATIC=1
           export OPENSSL_LIB_DIR=$(brew --prefix openssl@3)/lib
           export OPENSSL_INCLUDE_DIR=$(brew --prefix openssl@3)/include
-          
+
           cargo test --verbose --target ${{ matrix.target }}

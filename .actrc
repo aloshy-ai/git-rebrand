@@ -1,5 +1,4 @@
 --container-daemon-socket /var/run/docker.sock
---secret-file .env.ci
 --artifact-server-path /tmp/artifacts
 --container-architecture linux/amd64
 -P ubuntu-latest=rust:latest

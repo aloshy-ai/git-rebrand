@@ -25,7 +25,7 @@ Test the main CI pipeline that runs tests and checks:
 act push -j test
 
 # Development mode (faster, with preserved state)
-act push -j test --reuse --preserve-volumes
+act --reuse --preserve-volumes push -j test
 ```
 
 The standard approach starts with a fresh environment each time, ensuring your tests work in the same conditions as the actual CI. Development mode is faster but should only be used during active development.
