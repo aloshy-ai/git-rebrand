@@ -37,6 +37,7 @@ jobs:
         with:
           files: lcov.info
           fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   macos-test:
     name: macOS Test Suite
