@@ -25,21 +25,10 @@ jobs:
           rustup component add rustfmt
           rustup component add clippy
 
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
       - name: Check formatting
-        if: github.actor != 'nektos/act'  # Skip in act
         run: cargo fmt --all -- --check
 
       - name: Run clippy
-        if: github.actor != 'nektos/act'  # Skip in act
         run: cargo clippy --all-targets --all-features -- -D warnings
 
       - name: Run tests
@@ -67,8 +56,9 @@ jobs:
           echo "OPENSSL_LIB_DIR=$(brew --prefix openssl@3)/lib" >> $GITHUB_ENV
           echo "OPENSSL_INCLUDE_DIR=$(brew --prefix openssl@3)/include" >> $GITHUB_ENV
           echo "PKG_CONFIG_PATH=$(brew --prefix openssl@3)/lib/pkgconfig" >> $GITHUB_ENV
-          # Cross-compilation specific settings
-          echo "PKG_CONFIG_ALLOW_CROSS=1" >> $GITHUB_ENV
+          # Add these new environment variables
+          echo "LDFLAGS=-L$(brew --prefix openssl@3)/lib" >> $GITHUB_ENV
+          echo "CPPFLAGS=-I$(brew --prefix openssl@3)/include" >> $GITHUB_ENV
           echo "OPENSSL_STATIC=1" >> $GITHUB_ENV
 
       - name: Install Rust toolchain
@@ -87,8 +77,9 @@ jobs:
 
       - name: Build
         run: |
-          # Set target-specific environment variables
-          echo "TARGET_PKG_CONFIG_PATH=$(brew --prefix openssl@3)/lib/pkgconfig" >> $GITHUB_ENV
+          # Export the OpenSSL paths explicitly for the build
+          export OPENSSL_LIB_DIR=$(brew --prefix openssl@3)/lib
+          export OPENSSL_INCLUDE_DIR=$(brew --prefix openssl@3)/include
           cargo build --verbose --target ${{ matrix.target }}
 
       - name: Run tests

@@ -21,12 +21,14 @@ nix develop
 Test the main CI pipeline that runs tests and checks:
 
 ```bash
-# Dry run to see what would happen
-act -n push -j test
-
-# Actually run the tests
+# Standard approach (clean environment, recommended for final verification)
 act push -j test
+
+# Development mode (faster, with preserved state)
+act push -j test --reuse --preserve-volumes
 ```
+
+The standard approach starts with a fresh environment each time, ensuring your tests work in the same conditions as the actual CI. Development mode is faster but should only be used during active development.
 
 ### Audit Workflow
 
@@ -55,14 +57,31 @@ Note: The actual release creation and asset upload steps are skipped in local te
 --container-daemon-socket /var/run/docker.sock
 --secret-file .env.ci
 --artifact-server-path /tmp/artifacts
--P ubuntu-latest=catthehacker/ubuntu:act-latest
+--container-architecture linux/amd64
+-P ubuntu-latest=rust:latest
+--bind
 ```
 
 ### .env.ci (create this file)
 
 ```env
+# Use dummy tokens for local testing
 GITHUB_TOKEN=dummy-token
+ACTIONS_RUNTIME_TOKEN=dummy-token
+CODECOV_TOKEN=dummy-token
 ```
+
+## What's Being Tested
+
+- **CI Workflow**: 
+  - Rust compilation
+  - Code formatting (cargo fmt)
+  - Linting (clippy)
+  - Unit tests
+  - Note: macOS tests (`macos-test` job) will be skipped locally as Act only supports Linux-based containers
+
+- **Audit Workflow**: Security vulnerability scanning
+- **Release Workflow**: Build and packaging process for releases
 
 ## Troubleshooting
 
@@ -73,22 +92,14 @@ GITHUB_TOKEN=dummy-token
 
 2. **Test Failures**:
    - Use verbose output for more details:
-
      ```bash
      act -v push -j test
      ```
-
    - Check the test logs in the artifacts directory
 
 3. **Docker Issues**:
    - Ensure Docker daemon is running
    - Check Docker socket permissions
-
-## What's Being Tested
-
-- **CI Workflow**: Rust compilation, tests, and code quality checks
-  - Note: macOS tests (`macos-test` job) will be skipped locally as Act only supports Linux-based containers
-- **Audit Workflow**: Security vulnerability scanning
-- **Release Workflow**: Build and packaging process for releases
+   - If using development mode with preserved volumes, try the standard clean approach first
 
 The actual GitHub operations (creating releases, uploading assets) are skipped in local testing via `if: ${{ !env.ACT }}` conditions.
