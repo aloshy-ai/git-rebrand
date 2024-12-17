@@ -28,7 +28,11 @@ act push -j test
 act --reuse --preserve-volumes push -j test
 ```
 
-The standard approach starts with a fresh environment each time, ensuring your tests work in the same conditions as the actual CI. Development mode is faster but should only be used during active development.
+The standard approach starts with a fresh environment each time, ensuring your tests work in the same conditions as the actual CI. Development mode uses two flags:
+- `--reuse`: Reuses containers instead of creating new ones
+- `--preserve-volumes`: Maintains persistent volumes between runs, preserving compiled artifacts and dependencies
+
+This combination significantly speeds up subsequent runs during active development.
 
 ### Audit Workflow
 
