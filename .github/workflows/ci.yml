@@ -9,6 +9,7 @@ on:
 env:
   CARGO_TERM_COLOR: always
   RUST_BACKTRACE: 1
+  RUSTC_WRAPPER: ""
 
 jobs:
   test:
@@ -16,11 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      - name: Set env for local testing
-        if: github.actor == 'nektos/act'
-        run: |
-          echo "RUSTC_WRAPPER=" >> $GITHUB_ENV
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
