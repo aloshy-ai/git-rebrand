@@ -16,7 +16,7 @@ jobs:
       
       - name: Create Release
         id: create_release
-        if: ${{ !env.ACT }}  # Skip when running locally
+        if: github.actor != 'nektos/act'
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -29,36 +29,36 @@ jobs:
   build-release:
     name: Build Release
     needs: create-release
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-latest
-            artifact_name: git-rebrand
-            asset_name: git-rebrand-linux-amd64
-          - os: macos-latest
-            artifact_name: git-rebrand
-            asset_name: git-rebrand-darwin-amd64
-          - os: windows-latest
-            artifact_name: git-rebrand.exe
-            asset_name: git-rebrand-windows-amd64.exe
-    
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
       
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-apple-darwin, aarch64-apple-darwin
+          components: clippy
       
-      - name: Build release binary
-        run: cargo build --release
+      - name: Build for x86_64
+        run: cargo build --release --target x86_64-apple-darwin
       
-      - name: Upload Release Asset
-        if: ${{ !env.ACT }}  # Skip when running locally
+      - name: Build for arm64
+        run: cargo build --release --target aarch64-apple-darwin
+      
+      - name: Create Universal Binary
+        run: |
+          lipo -create \
+            ./target/x86_64-apple-darwin/release/git-rebrand \
+            ./target/aarch64-apple-darwin/release/git-rebrand \
+            -output git-rebrand-universal
+      
+      - name: Upload Universal Binary
+        if: github.actor != 'nektos/act'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ./target/release/${{ matrix.artifact_name }}
-          asset_name: ${{ matrix.asset_name }}
+          asset_path: ./git-rebrand-universal
+          asset_name: git-rebrand-darwin-universal
           asset_content_type: application/octet-stream
