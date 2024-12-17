@@ -1,0 +1,9 @@
+[source.crates-io]
+registry = "https://github.com/rust-lang/crates.io-index"
+
+[target.aarch64-apple-darwin]
+linker = "cc"
+
+[build]
+rustc-wrapper = "sccache"
+
