@@ -35,6 +35,8 @@ env_logger = "0.10"
 
 # Git functionality
 git2 = "0.19"
+# OpenSSL (for static linking)
+openssl = { version = "0.10", features = ["vendored"] }
 
 # Utilities
 chrono = "0.4"
@@ -75,3 +77,6 @@ rustdoc-args = ["--cfg", "docsrs"]
 
 [badges]
 maintenance = { status = "actively-developed" }
+
+[features]
+vendored-openssl = ["openssl/vendored"]
