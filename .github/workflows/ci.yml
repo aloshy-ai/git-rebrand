@@ -13,7 +13,7 @@ env:
 
 jobs:
   test:
-    name: Test
+    name: Codecov Test Report
     runs-on: ubuntu-latest
     container:
       image: rust:latest
