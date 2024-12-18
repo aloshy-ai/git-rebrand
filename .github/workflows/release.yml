@@ -1,4 +1,4 @@
-name: Version and Release
+name: Release
 
 permissions:
   contents: write
@@ -97,7 +97,7 @@ jobs:
           echo "OPENSSL_LIB_DIR=$(brew --prefix openssl@3)/lib" >> $GITHUB_ENV
           echo "OPENSSL_INCLUDE_DIR=$(brew --prefix openssl@3)/include" >> $GITHUB_ENV
           echo "PKG_CONFIG_PATH=$(brew --prefix openssl@3)/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
-          echo "LDFLAGS=-L$(brew--prefix openssl@3)/lib" >> $GITHUB_ENV
+          echo "LDFLAGS=-L$(brew --prefix openssl@3)/lib" >> $GITHUB_ENV
           echo "CPPFLAGS=-I$(brew --prefix openssl@3)/include" >> $GITHUB_ENV
           echo "LIBRARY_PATH=$(brew --prefix openssl@3)/lib" >> $GITHUB_ENV
           echo "PKG_CONFIG_ALLOW_CROSS=1" >> $GITHUB_ENV

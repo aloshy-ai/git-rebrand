@@ -89,6 +89,29 @@ cargo audit
 
 ## Release Process
 
+### Automated Release (Recommended)
+
+1. Go to the GitHub Actions tab in your repository
+2. Select the "Release" workflow
+3. Click "Run workflow"
+4. Choose the version bump type:
+   - `patch` (e.g., 1.0.0 -> 1.0.1) for backwards-compatible bug fixes
+   - `minor` (e.g., 1.0.0 -> 1.1.0) for new features
+   - `major` (e.g., 1.0.0 -> 2.0.0) for breaking changes
+5. Click "Run workflow"
+
+The workflow will automatically:
+
+- Bump the version in Cargo.toml
+- Generate a changelog from recent commits
+- Create a git tag
+- Build universal macOS binary
+- Create a GitHub release
+- Add release notes
+- Send a notification
+
+### Manual Release (Legacy Method)
+
 1. Update version in `Cargo.toml`
 2. Update CHANGELOG.md following the Keep a Changelog format
 3. Create and push a new tag:
@@ -99,7 +122,6 @@ git push origin v0.1.x
 ```
 
 The release workflow will automatically:
-
 - Create a GitHub release
 - Build binaries for Linux, macOS, and Windows
 - Attach binaries to the release

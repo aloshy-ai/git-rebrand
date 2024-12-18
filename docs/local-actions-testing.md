@@ -25,12 +25,12 @@ Test the main CI pipeline that runs tests and checks:
 act push -j test
 
 # Development mode (faster, with preserved state)
-act --reuse --preserve-volumes push -j test
+act --reuse push -j test
 ```
 
 The standard approach starts with a fresh environment each time, ensuring your tests work in the same conditions as the actual CI. Development mode uses two flags:
-- `--reuse`: Reuses containers instead of creating new ones
-- `--preserve-volumes`: Maintains persistent volumes between runs, preserving compiled artifacts and dependencies
+
+- `--reuse`: Don't remove container(s) on successfully completed workflow(s) to maintain state between runs
 
 This combination significantly speeds up subsequent runs during active development.
 
@@ -42,13 +42,24 @@ Test the security audit workflow:
 act push -j audit
 ```
 
-### Release Workflow
+### Release Workflow Testing
 
-Test the release build process (simulates creating a new version):
+To test the release process locally with Act, copy and paste this entire block:
 
 ```bash
-# Test with a sample version
-act push --tag v1.0.0 -j build-release
+# Create a test event file
+cat > event.json << EOF
+{
+  "ref": "refs/tags/v1.0.0",
+  "ref_name": "v1.0.0"
+}
+EOF
+
+# Test the release workflow
+act push -e event.json -j build-release
+
+# Clean up
+rm event.json
 ```
 
 Note: The actual release creation and asset upload steps are skipped in local testing.
