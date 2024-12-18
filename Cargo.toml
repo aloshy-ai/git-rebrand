@@ -1,6 +1,6 @@
 [package]
 name = "git-rebrand"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["aloshy.🅰🅸 <noreply@aloshy.ai>"]
 description = "A Git extension to rewrite repository history for rebranding purposes"
