@@ -82,7 +82,7 @@ jobs:
 
   build-release:
     needs: version
-    name: Build Release
+    name: macOS Release Build
     strategy:
       matrix:
         include:
@@ -132,14 +132,15 @@ jobs:
 
       - name: Build
         run: |
+          # Ensure pkg-config can find OpenSSL
           export PKG_CONFIG_PATH="$(brew --prefix openssl@3)/lib/pkgconfig:$PKG_CONFIG_PATH"
+          # Force static linking
           export OPENSSL_STATIC=1
           export OPENSSL_LIB_DIR=$(brew --prefix openssl@3)/lib
           export OPENSSL_INCLUDE_DIR=$(brew --prefix openssl@3)/include
-          
+
           cargo build --verbose --release --target ${{ matrix.target }}
 
-      # Add step to collect binaries
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
