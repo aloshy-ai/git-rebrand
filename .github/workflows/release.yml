@@ -91,6 +91,10 @@ jobs:
           - os: macos-14
             target: aarch64-apple-darwin
     runs-on: ${{ matrix.os }}
+    env:
+      CARGO_TERM_COLOR: always
+      RUST_BACKTRACE: 1
+      RUSTC_WRAPPER: ""
     steps:
       - uses: actions/checkout@v4
         with:
